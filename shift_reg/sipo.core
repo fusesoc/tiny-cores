@@ -1,0 +1,42 @@
+CAPI=2:
+name: ::sipo:0.1
+description: Serial in parallel out shift register
+
+filesets:
+
+  hdl:
+    files:
+      - sipo.v : {file_type: verilogSource}
+      - shift_reg_components.vhd : {file_type: vhdlSource-93}
+
+  tb:
+    files:
+      - tb/sipo_harness.v
+      - tb/test_sipo_random.v
+    file_type: verilogSource
+
+parameters:
+
+  NUM_VECTORS:
+    description: Number of random test vectors
+    datatype: int
+    paramtype: vlogparam
+
+  WIDTH:
+    description: Size of the parallel data output
+    datatype: int
+    paramtype: vlogparam
+
+targets:
+
+  default:
+    toplevel: sipo
+    filesets: [hdl]
+    parameters: [WIDTH]
+
+  sim:
+    toplevel: test_sipo_random
+    filesets: [hdl, tb]
+    default_tool: icarus
+    parameters: [NUM_VECTORS, WIDTH]
+

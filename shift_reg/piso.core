@@ -1,0 +1,46 @@
+CAPI=2:
+name: ::piso:0.1
+description: Parallel in serial out shift register
+
+filesets:
+
+  hdl:
+    files:
+      - piso.v : {file_type: verilogSource}
+      - shift_reg_components.vhd : {file_type: vhdlSource-93}
+
+  tb:
+    files:
+      - tb/piso_harness.v
+      - tb/test_piso_random.v
+    file_type: verilogSource
+
+parameters:
+
+  NUM_VECTORS:
+    description: Number of random test vectors
+    datatype: int
+    paramtype: vlogparam
+
+  WIDTH:
+    description: Size of the parallel data input
+    datatype: int
+    paramtype: vlogparam
+
+  EXTRA_BITS:
+    description: Number of extra bits between the input and serial output
+    datatype: int
+    paramtype: vlogparam
+
+targets:
+
+  default:
+    toplevel: sipo
+    filesets: [hdl]
+    parameters: [WIDTH, EXTRA_BITS]
+
+  sim:
+    toplevel: test_piso_random
+    filesets: [hdl, tb]
+    default_tool: icarus
+    parameters: [NUM_VECTORS, WIDTH, EXTRA_BITS]
